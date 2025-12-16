@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
   <!-- Google Tag Manager -->
-  
   <script>
     (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -180,8 +179,7 @@
 </head>
 <body>
   <!-- Google Tag Manager (noscript) -->
-  <!-- TODO: Replace GTM-XXXXXXX with your container ID -->
-  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX"
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MH9X9NGV"
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- End Google Tag Manager (noscript) -->
 
@@ -280,7 +278,7 @@
 
           <div style="height:12px"></div>
 
-          <!-- NEW: Estimated repairs -->
+          <!-- Estimated repairs -->
           <div class="row">
             <div>
               <label for="estimatedRepairs">Estimated repairs / credits (optional)</label>
@@ -435,6 +433,21 @@
     const dd = String(d.getDate()).padStart(2,"0");
     const yyyy = d.getFullYear();
     return `${mm}/${dd}/${yyyy}`;
+  }
+
+  // ---------- Lightweight Conversion Event (fires once per page load) ----------
+  window.dataLayer = window.dataLayer || [];
+  let conversionFired = false;
+
+  function fireCalcConversion(payload) {
+    if (conversionFired) return;
+    conversionFired = true;
+
+    window.dataLayer.push({
+      event: "tool_conversion",
+      tool_name: "cost_to_sell_calculator_tn",
+      ...payload
+    });
   }
 
   // ---------- Title premium estimate ----------
@@ -674,6 +687,24 @@
     const totalCosts = commission + closingCosts + taxProration + payoff + repairs + titlePremium;
     const net = salePrice - totalCosts;
 
+    // ---- Lightweight conversion event (fires once per page load) ----
+    const hasMeaningfulInputs =
+      salePrice > 0 &&
+      (commission > 0 || closingCosts > 0) &&
+      (payoff > 0 || annualTax > 0 || repairs > 0 || titleYes);
+
+    if (hasMeaningfulInputs) {
+      fireCalcConversion({
+        sale_price_bucket:
+          salePrice >= 750000 ? "750k_plus" :
+          salePrice >= 400000 ? "400_749k" :
+          "under_400k",
+        county: titleYes ? county : "n/a",
+        title_selected: titleYes ? "yes" : "no"
+      });
+    }
+    // ---------------------------------------------------------------
+
     salePriceOut.textContent = fmtMoney(salePrice);
     totalCostsOut.textContent = fmtMoney(totalCosts);
 
@@ -710,4 +741,5 @@
 </script>
 </body>
 </html>
+
 
