@@ -3,8 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Cost to Sell Calculator (Tennessee)</title>
-
+  <title>Cost to Sell Calculator • Tennessee</title>
   <style>
     :root{
       --bg:#0b1220;
@@ -16,10 +15,11 @@
       --accent:#38bdf8;
       --accent2:#22c55e;
       --warn:#fbbf24;
+      --bad:#fb7185;
       --shadow: 0 18px 45px rgba(0,0,0,.35);
       --radius:18px;
       --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
     }
     *{box-sizing:border-box}
     body{
@@ -29,211 +29,653 @@
       background:
         radial-gradient(1100px 650px at 15% 15%, rgba(56,189,248,.18), transparent 55%),
         radial-gradient(900px 600px at 85% 25%, rgba(34,197,94,.14), transparent 55%),
+        radial-gradient(900px 700px at 55% 95%, rgba(251,191,36,.10), transparent 60%),
         var(--bg);
       min-height:100vh;
     }
     .wrap{max-width:1100px;margin:0 auto;padding:26px 18px 60px}
+    .top{
+      display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap;
+      padding:18px 18px 10px;
+    }
+    .brand{display:flex;flex-direction:column;gap:6px}
+    .brand h1{margin:0;font-size:24px;letter-spacing:.2px}
+    .brand p{margin:0;color:var(--muted);font-size:14px;line-height:1.45}
+    .badgeRow{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+    .pill{
+      border:1px solid var(--line);
+      padding:7px 10px;border-radius:999px;
+      background:rgba(255,255,255,.04);
+      color:var(--muted);font-size:12px;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap:16px;
+    }
+    @media (max-width: 920px){ .grid{grid-template-columns:1fr} }
     .card{
       background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
       border:1px solid var(--line);
       border-radius:var(--radius);
       box-shadow:var(--shadow);
-      padding:18px;
-      margin-bottom:16px;
+      overflow:hidden;
     }
-    h1{margin:0 0 6px;font-size:22px}
-    .sub{color:var(--muted);font-size:14px}
-    .pill{
-      display:inline-block;
-      margin-top:10px;
-      padding:6px 10px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.04);
-      font-size:12px;
-      color:var(--muted);
+    .cardHeader{
+      padding:16px 16px 12px;
+      border-bottom:1px solid var(--line);
+      display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
     }
-    .grid{
-      display:grid;
-      grid-template-columns:1.05fr .95fr;
-      gap:16px;
-      margin-top:16px;
-    }
-    @media (max-width:900px){ .grid{grid-template-columns:1fr} }
-
-    label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}
-    input, select{
+    .cardHeader h2{margin:0;font-size:16px}
+    .cardHeader .small{color:var(--muted);font-size:12px}
+    .cardBody{padding:16px}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media (max-width: 600px){ .row{grid-template-columns:1fr} }
+    label{display:block;font-size:12px;color:var(--muted);margin:0 0 6px}
+    input[type="text"], input[type="number"], select{
       width:100%;
-      padding:12px;
-      border-radius:12px;
-      border:1px solid rgba(255,255,255,.12);
       background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.12);
       color:var(--text);
+      border-radius:12px;
+      padding:12px 12px;
+      outline:none;
       font-size:14px;
     }
-    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    .small{font-size:12px;color:var(--muted);margin-top:6px}
-    .slider{margin-top:6px}
-    input[type=range]{width:100%}
-    .result{font-size:24px;font-weight:700}
-    .green{color:var(--accent2)}
-    .yellow{color:var(--warn)}
-    .line{
-      display:flex;justify-content:space-between;
-      padding:8px 0;border-bottom:1px solid var(--line);
-      font-family:var(--mono);font-size:13px;
+    input[type="text"]::placeholder{color:rgba(168,179,207,.55)}
+    input:focus, select:focus{border-color:rgba(56,189,248,.55)}
+    .inline{
+      display:flex;gap:10px;align-items:center;flex-wrap:wrap;
     }
-    .line:last-child{border-bottom:none}
     .btn{
-      margin-top:10px;
-      padding:10px 12px;
-      border-radius:12px;
-      border:1px solid var(--line);
+      border:1px solid rgba(255,255,255,.14);
       background:rgba(56,189,248,.12);
       color:var(--text);
+      padding:10px 12px;border-radius:12px;
       cursor:pointer;
+      font-size:13px;
+      transition:transform .04s ease, background .12s ease;
+      white-space:nowrap;
+      user-select:none;
+    }
+    .btn:hover{background:rgba(56,189,248,.16)}
+    .btn:active{transform:translateY(1px)}
+    .switchRow{
+      display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+      padding:10px 12px;border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.03);
+    }
+    .radioGroup{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+    .radioGroup label{margin:0;color:var(--text);font-size:13px}
+    .sliderWrap{
+      padding:12px 12px;border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.03);
+      border-radius:12px;
+    }
+    input[type="range"]{width:100%}
+    .sliderMeta{
+      display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;
+      margin-top:8px;color:var(--muted);font-size:12px
+    }
+    .kpi{
+      display:grid;gap:10px;
+    }
+    .kpiTop{
+      display:grid;gap:10px;
+      grid-template-columns:1fr 1fr;
+    }
+    @media (max-width: 520px){ .kpiTop{grid-template-columns:1fr} }
+    .kpiBox{
+      padding:14px 14px;border-radius:16px;
+      background:linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.02));
+      border:1px solid rgba(255,255,255,.12);
+    }
+    .kpiBox .t{color:var(--muted);font-size:12px;margin-bottom:6px}
+    .kpiBox .v{font-size:22px;font-weight:700;letter-spacing:.2px}
+    .kpiBox .v.green{color:rgba(34,197,94,.95)}
+    .kpiBox .v.blue{color:rgba(56,189,248,.95)}
+    .kpiBox .v.warn{color:rgba(251,191,36,.95)}
+    .kpiBox .v.bad{color:rgba(251,113,133,.95)}
+    .breakdown{
+      margin-top:10px;
+      border-top:1px solid var(--line);
+      padding-top:12px;
+      display:grid;gap:10px;
+    }
+    .lineItem{
+      display:flex;justify-content:space-between;gap:12px;align-items:baseline;
+      padding:10px 10px;border-radius:12px;
+      background:rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.10);
+    }
+    .lineItem .name{color:var(--muted);font-size:13px}
+    .lineItem .amt{font-family:var(--mono);font-size:13px}
+    .foot{
+      margin-top:14px;
+      color:rgba(168,179,207,.9);
+      font-size:12px;line-height:1.5
+    }
+    .warnBox{
+      margin-top:12px;
+      padding:10px 12px;border-radius:12px;
+      border:1px solid rgba(251,191,36,.25);
+      background:rgba(251,191,36,.08);
+      color:rgba(255,255,255,.92);
+      font-size:12px;line-height:1.45
     }
     .hidden{display:none}
   </style>
 </head>
-
 <body>
-<div class="wrap">
+  <div class="wrap">
 
-  <!-- Header -->
-  <div class="card">
-    <h1>Cost to Sell Calculator (Tennessee)</h1>
-    <div class="sub">
-      Estimate net proceeds: sale price − commission − closing costs − prorated taxes − payoff − optional title.
-    </div>
-    <div class="pill">
-      Date supports mm/dd/yy (default) or dd/mm (if day &gt; 12) or picker
-    </div>
-  </div>
-
-  <div class="grid">
-
-    <!-- INPUTS -->
-    <div class="card">
-      <h2>Inputs</h2>
-
-      <div class="row">
-        <div>
-          <label>Estimated sale price</label>
-          <input id="salePrice" placeholder="e.g. 500000">
+    <div class="card top">
+      <div class="brand">
+        <h1>Cost to Sell Calculator (Tennessee)</h1>
+        <p>Quick net-proceeds estimate: sale price minus commission, closing costs, prorated taxes, payoff, and optional title premium.</p>
+        <div class="badgeRow">
+          <div class="pill">Commission slider: 0–8% (0.25% steps)</div>
+          <div class="pill">Closing costs slider: 0.5–10%</div>
+          <div class="pill">Date supports mm/dd (default) or dd/mm (if day &gt; 12) or picker</div>
         </div>
-        <div>
-          <label>Mortgage payoff (optional)</label>
-          <input id="payoff" placeholder="Leave blank for $0">
+      </div>
+      <div class="pill">Built for fast seller conversations</div>
+    </div>
+
+    <div class="grid" style="margin-top:16px;">
+
+      <!-- Inputs -->
+      <div class="card">
+        <div class="cardHeader">
+          <h2>Inputs</h2>
+          <div class="small">Blank payoff defaults to $0</div>
+        </div>
+        <div class="cardBody">
+
+          <div class="row">
+            <div>
+              <label for="salePrice">Estimated sale price</label>
+              <input id="salePrice" type="text" placeholder="e.g., 500000" inputmode="decimal" />
+            </div>
+
+            <div>
+              <label for="mortgagePayoff">Mortgage payoff (optional)</label>
+              <input id="mortgagePayoff" type="text" placeholder="Leave blank for $0" inputmode="decimal" />
+            </div>
+          </div>
+
+          <div style="height:12px"></div>
+
+          <div class="row">
+            <div>
+              <label for="propertyTax">Annual property tax (from last bill / estimate)</label>
+              <input id="propertyTax" type="text" placeholder="e.g., 2500" inputmode="decimal" />
+            </div>
+
+            <div>
+              <label for="closingDateText">Closing date</label>
+              <div class="inline">
+                <input id="closingDateText" type="text" placeholder="mm/dd/yyyy (dd/mm if day > 12)" style="flex:1;min-width:220px" />
+                <button class="btn" id="openDatePicker" type="button">Pick date</button>
+              </div>
+              <input id="closingDatePicker" type="date" class="hidden" />
+              <div class="small" style="margin-top:6px;color:var(--muted);">
+                Enter <strong>mm/dd</strong> (default). If the first number is greater than 12, we interpret it as <strong>dd/mm</strong>. Or use the date picker.
+                <br/>Property tax proration = (annual tax ÷ 365) × (days from Jan 1 through closing date).
+              </div>
+            </div>
+          </div>
+
+          <div style="height:12px"></div>
+
+          <div class="row">
+            <div>
+              <label>Real estate commission</label>
+              <div class="sliderWrap">
+                <input id="commission" type="range" min="0" max="8" step="0.25" value="5" />
+                <div class="sliderMeta">
+                  <span>0%</span>
+                  <span><strong id="commissionLabel">5.00%</strong></span>
+                  <span>8%</span>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label>Closing costs (non-commission)</label>
+              <div class="sliderWrap">
+                <input id="closingCosts" type="range" min="0.5" max="10" step="0.25" value="2" />
+                <div class="sliderMeta">
+                  <span>0.5%</span>
+                  <span><strong id="closingCostsLabel">2.00%</strong></span>
+                  <span>10%</span>
+                </div>
+              </div>
+              <div class="small" style="margin-top:6px;color:var(--muted);">
+                This is a % placeholder for seller-paid closing costs (varies by deal).
+              </div>
+            </div>
+          </div>
+
+          <div style="height:12px"></div>
+
+          <div class="switchRow">
+            <div style="min-width:185px;color:var(--muted);font-size:12px;">Title insurance (owner’s policy)</div>
+            <div class="radioGroup" role="radiogroup" aria-label="Title insurance">
+              <label><input type="radio" name="titleIns" value="no" checked /> No</label>
+              <label><input type="radio" name="titleIns" value="yes" /> Yes</label>
+            </div>
+          </div>
+
+          <div id="countyRow" class="row hidden" style="margin-top:12px;">
+            <div>
+              <label for="county">County (TN)</label>
+              <select id="county"></select>
+              <div class="small" style="margin-top:6px;color:var(--muted);">
+                Title premium is an estimate using published county schedules. You can override below for exact quotes.
+              </div>
+            </div>
+            <div>
+              <label for="titleOverride">Title premium override (optional)</label>
+              <input id="titleOverride" type="text" placeholder="Leave blank to auto-estimate" inputmode="decimal" />
+            </div>
+          </div>
+
+          <div class="warnBox">
+            <strong style="color:rgba(251,191,36,.95);">Note:</strong>
+            Title charges can be “all-inclusive” in certain markets and may include exam/search fees depending on county and provider.
+            Use this as a planning estimate and confirm with your title company for a final figure.
+          </div>
+
         </div>
       </div>
 
-      <div class="row" style="margin-top:12px;">
-        <div>
-          <label>Annual property tax</label>
-          <input id="tax" placeholder="e.g. 2500">
+      <!-- Outputs -->
+      <div class="card">
+        <div class="cardHeader">
+          <h2>Estimated net proceeds</h2>
+          <div class="small">Updates as you type</div>
         </div>
-        <div>
-          <label>Closing date</label>
-          <input id="dateText" placeholder="mm/dd/yyyy (dd/mm if day > 12)">
-          <div class="small">
-            Enter <strong>mm/dd/yyyy</strong>. If the first number is greater than 12,
-            it will be interpreted as <strong>dd/mm</strong>.
-            <br>
-            Tax proration = (annual tax ÷ 365) × days from Jan 1 through closing date.
+        <div class="cardBody">
+          <div class="kpi">
+            <div class="kpiTop">
+              <div class="kpiBox">
+                <div class="t">Sale price</div>
+                <div class="v blue" id="salePriceOut">$0</div>
+              </div>
+              <div class="kpiBox">
+                <div class="t">Net proceeds (estimate)</div>
+                <div class="v green" id="netOut">$0</div>
+              </div>
+            </div>
+
+            <div class="kpiBox">
+              <div class="t">Total estimated costs</div>
+              <div class="v warn" id="totalCostsOut">$0</div>
+
+              <div class="breakdown" id="breakdown"></div>
+
+              <div class="foot" id="assumptions"></div>
+              <div class="foot">
+                Want a precise title number? Use your preferred title company or a rate tool (like Old Republic’s) to confirm.
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <label style="margin-top:14px;">Real estate commission</label>
-      <input id="commission" type="range" min="0" max="8" step="0.25" value="5">
-      <div class="small">Commission: <strong><span id="commOut">5.00%</span></strong></div>
-
-      <label style="margin-top:14px;">Closing costs (non-commission)</label>
-      <input id="closing" type="range" min="0.5" max="10" step="0.25" value="2">
-      <div class="small">Closing costs: <strong><span id="closeOut">2.00%</span></strong></div>
-    </div>
-
-    <!-- OUTPUTS -->
-    <div class="card">
-      <h2>Estimated net proceeds</h2>
-
-      <div class="line"><span>Sale price</span><span id="saleOut">$0</span></div>
-      <div class="line"><span>Commission</span><span id="commCost">$0</span></div>
-      <div class="line"><span>Closing costs</span><span id="closeCost">$0</span></div>
-      <div class="line"><span>Prorated property tax</span><span id="taxCost">$0</span></div>
-      <div class="line"><span>Mortgage payoff</span><span id="payCost">$0</span></div>
-
-      <div class="line" style="font-weight:700;">
-        <span>Total costs</span>
-        <span id="totalCost" class="yellow">$0</span>
-      </div>
-
-      <div class="result green" id="net">$0</div>
     </div>
 
   </div>
-</div>
 
 <script>
-  const $ = id => document.getElementById(id);
-  const money = n => n.toLocaleString('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0});
-  const num = v => isNaN(parseFloat(v)) ? 0 : parseFloat(v);
-
-  function parseDateFlexible(s){
-    if(!s) return null;
-    const m=s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})$/);
-    if(!m) return null;
-
-    let a=+m[1], b=+m[2], y=+m[3];
-    if(y<100) y+=y<80?2000:1900;
-
-    let month,day;
-    if(a>12){ day=a; month=b; }
-    else if(b>12){ month=a; day=b; }
-    else{ month=a; day=b; } // default mm/dd
-
-    const d=new Date(y,month-1,day);
-    return (d && d.getMonth()==month-1)?d:null;
+  // ---------- Helpers ----------
+  function cleanNumber(val) {
+    if (val == null) return 0;
+    const s = String(val).trim();
+    if (!s) return 0;
+    const cleaned = s.replace(/[$,\s]/g, "");
+    const n = Number(cleaned);
+    return Number.isFinite(n) ? n : 0;
   }
 
-  function dayOfYear(d){
-    return Math.floor((d-new Date(d.getFullYear(),0,1))/(1000*60*60*24))+1;
+  function fmtMoney(n) {
+    const sign = n < 0 ? "-" : "";
+    const abs = Math.abs(n);
+    return sign + abs.toLocaleString(undefined, { style:"currency", currency:"USD", maximumFractionDigits: 0 });
   }
 
-  function calc(){
-    const price=num(salePrice.value);
-    const payoffAmt=num(payoff.value);
-    const taxAmt=num(tax.value);
-    const commPct=num(commission.value)/100;
-    const closePct=num(closing.value)/100;
+  function clamp(n, min, max) { return Math.min(max, Math.max(min, n)); }
 
-    commOut.textContent=(commPct*100).toFixed(2)+'%';
-    closeOut.textContent=(closePct*100).toFixed(2)+'%';
+  function isValidDate(d) { return d instanceof Date && !Number.isNaN(d.getTime()); }
 
-    let proratedTax=0;
-    const d=parseDateFlexible(dateText.value);
-    if(d && taxAmt>0) proratedTax=(taxAmt/365)*dayOfYear(d);
+  // US-friendly parser:
+  // - accepts yyyy-mm-dd (picker)
+  // - accepts mm/dd/yy(yy) OR dd/mm/yy(yy)
+  // - if ambiguous (both <= 12): defaults to mm/dd
+  // - if first number > 12: treats as dd/mm
+  // - if second number > 12: treats as mm/dd
+  function parseDateFlexible(s) {
+    if (!s) return null;
+    const str = String(s).trim();
+    if (!str) return null;
 
-    const commCostAmt=price*commPct;
-    const closeCostAmt=price*closePct;
-    const total=commCostAmt+closeCostAmt+proratedTax+payoffAmt;
-    const net=price-total;
+    // yyyy-mm-dd
+    const iso = str.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (iso) {
+      const y = Number(iso[1]), m = Number(iso[2]) - 1, d = Number(iso[3]);
+      const dt = new Date(y, m, d);
+      if (dt.getFullYear() !== y || dt.getMonth() !== m || dt.getDate() !== d) return null;
+      return dt;
+    }
 
-    saleOut.textContent=money(price);
-    commCost.textContent=money(commCostAmt);
-    closeCost.textContent=money(closeCostAmt);
-    taxCost.textContent=money(proratedTax);
-    payCost.textContent=money(payoffAmt);
-    totalCost.textContent=money(total);
-    net.textContent=money(net);
+    const m = str.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2}|\d{4})$/);
+    if (m) {
+      let a = Number(m[1]);
+      let b = Number(m[2]);
+      let yy = Number(m[3]);
+      if (m[3].length === 2) yy += (yy >= 70 ? 1900 : 2000);
+
+      let month, day;
+      if (a > 12 && b <= 12) { day = a; month = b; }        // dd/mm
+      else if (b > 12 && a <= 12) { month = a; day = b; }   // mm/dd
+      else { month = a; day = b; }                          // ambiguous -> mm/dd
+
+      if (month < 1 || month > 12 || day < 1 || day > 31) return null;
+
+      const dt = new Date(yy, month - 1, day);
+      if (dt.getFullYear() !== yy || dt.getMonth() !== (month - 1) || dt.getDate() !== day) return null;
+      return dt;
+    }
+
+    return null;
   }
 
-  ['salePrice','payoff','tax','dateText','commission','closing'].forEach(id=>{
-    $(id).addEventListener('input',calc);
+  function dayOfYear(date) {
+    const start = new Date(date.getFullYear(), 0, 1);
+    return Math.floor((date - start) / (1000*60*60*24)) + 1;
+  }
+
+  function formatAsMMDDYYYY(d) {
+    const mm = String(d.getMonth()+1).padStart(2,"0");
+    const dd = String(d.getDate()).padStart(2,"0");
+    const yyyy = d.getFullYear();
+    return `${mm}/${dd}/${yyyy}`;
+  }
+
+  // ---------- Title premium estimate ----------
+  // Same schedule structure you had before (special counties + all other TN).
+  // If you prefer: we can remove the auto-estimate entirely and require override input.
+  function ceilToThousand(x) { return Math.ceil(x / 1000) * 1000; }
+
+  function premiumBySchedule(amount, sched) {
+    if (!amount || amount <= 0) return 0;
+    const A = ceilToThousand(amount);
+    let premium = 0;
+
+    premium += sched.baseCharge;
+
+    let remaining = A - sched.baseCap;
+    if (remaining <= 0) return Math.max(premium, sched.minimum || 0);
+
+    for (const tier of sched.tiers) {
+      if (remaining <= 0) break;
+      const tierSpan = tier.cap === Infinity ? remaining : Math.min(remaining, tier.cap);
+      premium += (tierSpan / 1000) * tier.ratePerThousand;
+      remaining -= tierSpan;
+    }
+
+    return Math.max(premium, sched.minimum || 0);
+  }
+
+  const schedules = {
+    A: { // Montgomery, Rutherford, Sumner, Williamson
+      baseCap: 1000, baseCharge: 200, minimum: 200,
+      tiers: [
+        { cap:  99000, ratePerThousand: 6.50 },     // 1k -> 100k
+        { cap: 400000, ratePerThousand: 4.80 },     // 100k -> 500k
+        { cap: 500000, ratePerThousand: 3.15 },     // 500k -> 1M
+        { cap:4000000, ratePerThousand: 2.10 },     // 1M -> 5M
+        { cap:5000000, ratePerThousand: 1.60 },     // 5M -> 10M
+        { cap:5000000, ratePerThousand: 1.35 },     // 10M -> 15M
+        { cap:Infinity, ratePerThousand: 1.35 }
+      ]
+    },
+    B: { // Hamilton
+      baseCap: 1000, baseCharge: 200, minimum: 200,
+      tiers: [
+        { cap:  99000, ratePerThousand: 6.50 },
+        { cap: 900000, ratePerThousand: 3.20 },     // 100k -> 1M
+        { cap:4000000, ratePerThousand: 2.10 },     // 1M -> 5M
+        { cap:5000000, ratePerThousand: 1.60 },     // 5M -> 10M
+        { cap:5000000, ratePerThousand: 1.35 },     // 10M -> 15M
+        { cap:Infinity, ratePerThousand: 1.35 }
+      ]
+    },
+    C: { // Knox
+      baseCap: 1000, baseCharge: 200, minimum: 200,
+      tiers: [
+        { cap:  99000, ratePerThousand: 6.50 },
+        { cap: 900000, ratePerThousand: 3.20 },
+        { cap:4000000, ratePerThousand: 2.10 },
+        { cap:5000000, ratePerThousand: 1.60 },
+        { cap:5000000, ratePerThousand: 1.35 },
+        { cap:Infinity, ratePerThousand: 1.35 }
+      ]
+    },
+    D: { // Shelby
+      baseCap: 1000, baseCharge: 220, minimum: 220,
+      tiers: [
+        { cap:  99000, ratePerThousand: 4.40 },
+        { cap: 900000, ratePerThousand: 3.30 },     // 100k -> 1M
+        { cap:Infinity, ratePerThousand: 1.10 }     // > 1M
+      ]
+    },
+    G: { // Davidson
+      baseCap: 1000, baseCharge: 200, minimum: 200,
+      tiers: [
+        { cap:  99000, ratePerThousand: 6.50 },
+        { cap: 400000, ratePerThousand: 4.80 },     // 100k -> 500k
+        { cap: 500000, ratePerThousand: 3.15 },     // 500k -> 1M
+        { cap:4000000, ratePerThousand: 2.10 },     // 1M -> 5M
+        { cap:5000000, ratePerThousand: 1.60 },     // 5M -> 10M
+        { cap:5000000, ratePerThousand: 1.35 },     // 10M -> 15M
+        { cap:Infinity, ratePerThousand: 1.35 }
+      ]
+    },
+    E: { // All other TN (approx schedule)
+      baseCap: 50000, baseCharge: 4.50 * 50, minimum: 165,
+      tiers: [
+        { cap:  50000, ratePerThousand: 3.75 },      // 50k -> 100k
+        { cap:1900000, ratePerThousand: 2.65 },      // 100k -> 2M
+        { cap:3000000, ratePerThousand: 2.50 },      // 2M -> 5M
+        { cap:5000000, ratePerThousand: 1.60 },      // 5M -> 10M
+        { cap:5000000, ratePerThousand: 1.35 },      // 10M -> 15M
+        { cap:Infinity, ratePerThousand: 1.35 }
+      ]
+    }
+  };
+
+  function scheduleForCounty(county) {
+    const c = (county || "").toLowerCase();
+    if (c === "davidson") return "G";
+    if (c === "hamilton") return "B";
+    if (c === "knox") return "C";
+    if (c === "shelby") return "D";
+    if (c === "montgomery" || c === "rutherford" || c === "sumner" || c === "williamson") return "A";
+    return "E";
+  }
+
+  function estimateTitlePremium(salePrice, county) {
+    const key = scheduleForCounty(county);
+    return premiumBySchedule(salePrice, schedules[key]);
+  }
+
+  // ---------- Counties ----------
+  const TN_COUNTIES = [
+    "Anderson","Bedford","Benton","Bledsoe","Blount","Bradley","Campbell","Cannon","Carroll","Carter","Cheatham",
+    "Chester","Claiborne","Clay","Cocke","Coffee","Crockett","Cumberland","Davidson","Decatur","DeKalb","Dickson",
+    "Dyer","Fayette","Fentress","Franklin","Gibson","Giles","Grainger","Greene","Grundy","Hamblen","Hamilton",
+    "Hancock","Hardeman","Hardin","Hawkins","Haywood","Henderson","Henry","Hickman","Houston","Humphreys","Jackson",
+    "Jefferson","Johnson","Knox","Lake","Lauderdale","Lawrence","Lewis","Lincoln","Loudon","McMinn","McNairy","Macon",
+    "Madison","Marion","Marshall","Maury","Meigs","Monroe","Montgomery","Moore","Morgan","Obion","Overton","Perry",
+    "Pickett","Polk","Putnam","Rhea","Roane","Robertson","Rutherford","Scott","Sequatchie","Sevier","Shelby","Smith",
+    "Stewart","Sullivan","Sumner","Tipton","Trousdale","Unicoi","Union","Van Buren","Warren","Washington","Wayne",
+    "Weakley","White","Williamson","Wilson"
+  ];
+
+  // ---------- Wire up UI ----------
+  const salePriceEl = document.getElementById("salePrice");
+  const mortgagePayoffEl = document.getElementById("mortgagePayoff");
+  const propertyTaxEl = document.getElementById("propertyTax");
+  const closingTextEl = document.getElementById("closingDateText");
+  const closingPickerEl = document.getElementById("closingDatePicker");
+  const openPickerBtn = document.getElementById("openDatePicker");
+  const commissionEl = document.getElementById("commission");
+  const closingCostsEl = document.getElementById("closingCosts");
+  const commissionLabel = document.getElementById("commissionLabel");
+  const closingCostsLabel = document.getElementById("closingCostsLabel");
+  const countyRow = document.getElementById("countyRow");
+  const countyEl = document.getElementById("county");
+  const titleOverrideEl = document.getElementById("titleOverride");
+
+  const salePriceOut = document.getElementById("salePriceOut");
+  const netOut = document.getElementById("netOut");
+  const totalCostsOut = document.getElementById("totalCostsOut");
+  const breakdownEl = document.getElementById("breakdown");
+  const assumptionsEl = document.getElementById("assumptions");
+
+  // populate counties
+  countyEl.innerHTML = TN_COUNTIES.map(c => `<option value="${c}">${c} County</option>`).join("");
+  countyEl.value = "Davidson";
+
+  function getTitleChoice() {
+    const r = document.querySelector('input[name="titleIns"]:checked');
+    return r ? r.value : "no";
+  }
+
+  function syncTitleVisibility() {
+    const on = getTitleChoice() === "yes";
+    countyRow.classList.toggle("hidden", !on);
+  }
+
+  openPickerBtn.addEventListener("click", () => {
+    closingPickerEl.classList.remove("hidden");
+    if (typeof closingPickerEl.showPicker === "function") closingPickerEl.showPicker();
+    else closingPickerEl.focus();
   });
 
-  calc();
+  closingPickerEl.addEventListener("change", () => {
+    const d = parseDateFlexible(closingPickerEl.value);
+    if (d) closingTextEl.value = formatAsMMDDYYYY(d);
+    update();
+  });
+
+  closingTextEl.addEventListener("blur", () => {
+    const d = parseDateFlexible(closingTextEl.value);
+    if (d) {
+      // sync picker to ISO
+      const y = d.getFullYear();
+      const m = String(d.getMonth()+1).padStart(2,"0");
+      const dd = String(d.getDate()).padStart(2,"0");
+      closingPickerEl.value = `${y}-${m}-${dd}`;
+      closingTextEl.value = formatAsMMDDYYYY(d);
+    }
+    update();
+  });
+
+  document.querySelectorAll('input[name="titleIns"]').forEach(r => {
+    r.addEventListener("change", () => { syncTitleVisibility(); update(); });
+  });
+
+  function updateSliderLabels() {
+    commissionLabel.textContent = `${Number(commissionEl.value).toFixed(2)}%`;
+    closingCostsLabel.textContent = `${Number(closingCostsEl.value).toFixed(2)}%`;
+  }
+
+  [
+    salePriceEl, mortgagePayoffEl, propertyTaxEl,
+    closingTextEl, commissionEl, closingCostsEl,
+    countyEl, titleOverrideEl
+  ].forEach(el => el.addEventListener("input", update));
+
+  function addLine(name, amount) {
+    const div = document.createElement("div");
+    div.className = "lineItem";
+    div.innerHTML = `<div class="name">${name}</div><div class="amt">${fmtMoney(amount)}</div>`;
+    breakdownEl.appendChild(div);
+  }
+
+  function update() {
+    updateSliderLabels();
+    syncTitleVisibility();
+
+    const salePrice = cleanNumber(salePriceEl.value);
+    const payoff = cleanNumber(mortgagePayoffEl.value);
+    const annualTax = cleanNumber(propertyTaxEl.value);
+
+    const commissionPct = clamp(Number(commissionEl.value) / 100, 0, 0.08);
+    const closingCostsPct = clamp(Number(closingCostsEl.value) / 100, 0.005, 0.10);
+
+    const closingDate = parseDateFlexible(closingTextEl.value) || parseDateFlexible(closingPickerEl.value);
+
+    // property tax proration: annual / 365 * day-of-year
+    let taxProration = 0;
+    let doy = null;
+    if (closingDate && isValidDate(closingDate) && annualTax > 0) {
+      doy = dayOfYear(closingDate);
+      taxProration = (annualTax / 365) * doy;
+    }
+
+    const commission = salePrice * commissionPct;
+    const closingCosts = salePrice * closingCostsPct;
+
+    // title
+    const titleYes = getTitleChoice() === "yes";
+    const county = countyEl.value;
+    let titlePremium = 0;
+
+    if (titleYes && salePrice > 0) {
+      const override = cleanNumber(titleOverrideEl.value);
+      titlePremium = override > 0 ? override : estimateTitlePremium(salePrice, county);
+    }
+
+    const totalCosts = commission + closingCosts + taxProration + payoff + titlePremium;
+    const net = salePrice - totalCosts;
+
+    salePriceOut.textContent = fmtMoney(salePrice);
+    totalCostsOut.textContent = fmtMoney(totalCosts);
+
+    netOut.textContent = fmtMoney(net);
+    netOut.classList.remove("green","bad");
+    netOut.classList.add(net >= 0 ? "green" : "bad");
+
+    breakdownEl.innerHTML = "";
+    addLine(`Commission (${(commissionPct*100).toFixed(2)}%)`, commission);
+    addLine(`Closing costs (${(closingCostsPct*100).toFixed(2)}%)`, closingCosts);
+    addLine(`Prorated property tax`, taxProration);
+    addLine(`Mortgage payoff`, payoff);
+    if (titleYes) addLine(`Title insurance (estimate)`, titlePremium);
+
+    const dateText = (closingDate && isValidDate(closingDate)) ? formatAsMMDDYYYY(closingDate) : "—";
+    const taxNote = (closingDate && annualTax > 0)
+      ? `Tax proration uses day-of-year ${doy} for ${dateText}.`
+      : `Enter a closing date + annual tax to estimate tax proration.`;
+
+    const titleNote = titleYes
+      ? `Title is estimated for ${county} County (override available).`
+      : `Title insurance is excluded.`;
+
+    assumptionsEl.innerHTML = `
+      <div><strong>Assumptions:</strong> ${taxNote}</div>
+      <div>${titleNote}</div>
+    `;
+  }
+
+  // init
+  syncTitleVisibility();
+  update();
 </script>
 </body>
 </html>
