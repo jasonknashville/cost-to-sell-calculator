@@ -1,0 +1,697 @@
+diff --git a/index.html b/index.html
+index 72455b531d42c9495ae56fefb9178a1454d24169..9a3056b5a2a3eb90ad6e50c9e2a48d38dbb55fb6 100644
+--- a/index.html
++++ b/index.html
+@@ -347,50 +347,237 @@
+ 
+     .meta-link {
+       display: inline-flex;
+       align-items: center;
+       gap: 4px;
+       color: var(--accent-strong);
+     }
+ 
+     .meta-link span {
+       font-size: 0.8rem;
+     }
+ 
+     .meta-link svg {
+       width: 13px;
+       height: 13px;
+       opacity: 0.9;
+     }
+ 
+     .bottom-row {
+       margin-top: 6px;
+       display: flex;
+       justify-content: flex-end;
+       font-size: 0.76rem;
+       color: rgba(148, 163, 184, 0.85);
+     }
++
++    /* Cost-to-Sell Calculator */
++    .calculator-card {
++      background: linear-gradient(135deg, rgba(56, 189, 248, 0.06), rgba(56, 189, 248, 0.02));
++      border: 1px solid rgba(148, 163, 184, 0.28);
++      border-radius: 18px;
++      padding: 18px 18px 20px;
++      margin-bottom: 18px;
++      box-shadow: 0 18px 45px rgba(8, 15, 30, 0.55);
++    }
++
++    .calculator-header {
++      display: flex;
++      align-items: center;
++      justify-content: space-between;
++      gap: 12px;
++      margin-bottom: 14px;
++    }
++
++    .calculator-title {
++      font-size: 18px;
++      font-weight: 700;
++      color: #e2e8f0;
++      margin: 0;
++    }
++
++    .calculator-subtitle {
++      margin: 2px 0 0;
++      color: var(--text-muted);
++      font-size: 14px;
++      line-height: 1.4;
++    }
++
++    .badge-new {
++      background: var(--accent-soft);
++      color: var(--accent);
++      border: 1px solid rgba(56, 189, 248, 0.5);
++      padding: 6px 10px;
++      border-radius: 999px;
++      font-weight: 600;
++      font-size: 12px;
++    }
++
++    .calc-grid {
++      display: grid;
++      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
++      gap: 12px 14px;
++      margin-bottom: 14px;
++    }
++
++    .field {
++      display: flex;
++      flex-direction: column;
++      gap: 6px;
++      background: rgba(15, 23, 42, 0.65);
++      border: 1px solid rgba(148, 163, 184, 0.2);
++      border-radius: 12px;
++      padding: 10px 12px;
++    }
++
++    .field label {
++      font-weight: 600;
++      color: #cbd5e1;
++      font-size: 13px;
++    }
++
++    .field small {
++      color: var(--text-muted);
++      font-size: 12px;
++    }
++
++    .field input[type="text"],
++    .field input[type="number"],
++    .field select {
++      padding: 9px 10px;
++      border-radius: 10px;
++      border: 1px solid rgba(148, 163, 184, 0.25);
++      background: rgba(15, 23, 42, 0.75);
++      color: var(--text-main);
++      font-size: 14px;
++    }
++
++    .field input[type="text"]:focus,
++    .field input[type="number"]:focus,
++    .field select:focus,
++    .field input[type="range"]:focus {
++      outline: 1px solid var(--accent);
++      border-color: var(--accent);
++    }
++
++    .slider-row {
++      display: flex;
++      align-items: center;
++      gap: 10px;
++    }
++
++    .slider-row input[type="range"] {
++      flex: 1;
++      accent-color: var(--accent);
++    }
++
++    .slider-value {
++      min-width: 68px;
++      text-align: right;
++      font-weight: 700;
++      color: #e2e8f0;
++    }
++
++    .radio-row {
++      display: flex;
++      gap: 10px;
++      align-items: center;
++      flex-wrap: wrap;
++    }
++
++    .hidden {
++      display: none !important;
++    }
++
++    .picker-row {
++      display: flex;
++      gap: 8px;
++      align-items: center;
++      flex-wrap: wrap;
++    }
++
++    .picker-row button {
++      padding: 8px 10px;
++      border-radius: 10px;
++      border: 1px solid rgba(148, 163, 184, 0.3);
++      background: rgba(14, 165, 233, 0.1);
++      color: var(--text-main);
++      cursor: pointer;
++      transition: border-color 0.15s ease, transform 0.1s ease;
++    }
++
++    .picker-row button:hover {
++      border-color: var(--accent);
++      transform: translateY(-1px);
++    }
++
++    .results-card {
++      background: rgba(15, 23, 42, 0.85);
++      border-radius: 14px;
++      border: 1px solid rgba(56, 189, 248, 0.18);
++      padding: 14px 12px;
++      display: grid;
++      gap: 10px;
++    }
++
++    .results-card h4 {
++      margin: 0;
++      color: #e2e8f0;
++      font-size: 17px;
++    }
++
++    .result-number {
++      font-size: 26px;
++      font-weight: 800;
++      color: var(--accent);
++    }
++
++    .breakdown {
++      display: grid;
++      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
++      gap: 6px 12px;
++    }
++
++    .breakdown-row {
++      display: flex;
++      justify-content: space-between;
++      color: var(--text-main);
++      font-size: 14px;
++      padding: 6px 8px;
++      border-radius: 10px;
++      background: rgba(148, 163, 184, 0.06);
++      border: 1px solid rgba(148, 163, 184, 0.12);
++    }
++
++    .inline-note {
++      color: var(--text-muted);
++      font-size: 13px;
++    }
++
++    .muted {
++      color: var(--text-muted);
++    }
+   </style>
+ </head>
+ <body>
+   <!-- Google Tag Manager (noscript) -->
+ <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MH9X9NGV"
+ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+ <!-- End Google Tag Manager (noscript) -->
+   <div class="page-wrap">
+     <div class="shell">
+       <div class="glow-orbit"></div>
+ 
+       <!-- LEFT PANEL -->
+       <div class="content-left">
+         <div class="logo-mark">
+           <div class="logo-circle">
+             <span>JK</span>
+           </div>
+           <div class="logo-text">
+             <div class="logo-text-main">Jason Kaczmarski Team</div>
+             <div class="logo-text-sub">Nashville • Middle Tennessee</div>
+           </div>
+         </div>
+ 
+         <div class="kicker">Interactive buyer + seller tools</div>
+ 
+@@ -399,50 +586,136 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+         </h1>
+ 
+         <p class="hero-body">
+           These simple calculators are here to help you pressure-test your plans:
+           when to move up, what waiting might really cost, and how today’s numbers
+           stack up against your goals.
+         </p>
+ 
+         <div class="chips">
+           <div class="chip chip-cta">
+             <div class="chip-dot"></div>
+             Built for Middle Tennessee buyers &amp; sellers
+           </div>
+           <div class="chip">No login required</div>
+           <div class="chip">Email results to yourself (and Jason)</div>
+         </div>
+ 
+         <p class="footnote">
+           <strong>Friendly disclaimer:</strong> These are illustrations, not financial advice or rate quotes.
+           When you’re ready to zoom in on your specific situation, reach out and we’ll go deeper together.
+         </p>
+       </div>
+ 
+       <!-- RIGHT PANEL -->
+       <div class="content-right">
++        <div class="calculator-card" id="cost-to-sell">
++          <div class="calculator-header">
++            <div>
++              <p class="calculator-title">Tennessee Cost-to-Sell Estimator</p>
++              <p class="calculator-subtitle">
++                Estimate your net proceeds with prorated property taxes, closing costs, and optional title insurance.
++              </p>
++            </div>
++            <div class="badge-new">New</div>
++          </div>
++
++          <div class="calc-grid">
++            <div class="field">
++              <label for="sale-price">Estimated sales price</label>
++              <input type="number" id="sale-price" min="0" step="1000" placeholder="e.g., 475000" />
++            </div>
++
++            <div class="field">
++              <label for="closing-date">Closing date</label>
++              <div class="picker-row">
++                <input
++                  type="text"
++                  id="closing-date"
++                  inputmode="numeric"
++                  placeholder="dd/mm/yy or dd/mm/yyyy"
++                  aria-describedby="closing-date-help"
++                />
++                <button type="button" id="open-date-picker">Pick date</button>
++                <input type="date" id="closing-date-picker" class="hidden" />
++              </div>
++              <small id="closing-date-help">Type a date or use the picker—used to prorate property tax from Jan 1.</small>
++            </div>
++
++            <div class="field">
++              <label for="property-tax">Annual property tax</label>
++              <input type="number" id="property-tax" min="0" step="100" placeholder="e.g., 4200" />
++              <small>We’ll divide by 365 and multiply by days through closing.</small>
++            </div>
++
++            <div class="field">
++              <label for="mortgage-payoff">Mortgage payoff (if any)</label>
++              <input type="number" id="mortgage-payoff" min="0" step="1000" placeholder="Leave blank if none" />
++            </div>
++
++            <div class="field">
++              <label for="commission">Real estate commission</label>
++              <div class="slider-row">
++                <input type="range" id="commission" min="0" max="8" step="0.25" value="5" />
++                <div class="slider-value"><span id="commission-value">5.00</span>%</div>
++              </div>
++            </div>
++
++            <div class="field">
++              <label for="closing-costs">Closing costs</label>
++              <div class="slider-row">
++                <input type="range" id="closing-costs" min="0.5" max="10" step="0.25" value="2" />
++                <div class="slider-value"><span id="closing-value">2.00</span>%</div>
++              </div>
++            </div>
++
++            <div class="field">
++              <label>Are you paying title insurance?</label>
++              <div class="radio-row">
++                <label><input type="radio" name="title-insurance" value="yes" /> Yes</label>
++                <label><input type="radio" name="title-insurance" value="no" checked /> No</label>
++              </div>
++              <div id="county-row" class="hidden">
++                <label for="county" class="muted">Select county</label>
++                <select id="county"></select>
++                <small class="inline-note">Uses a simple county-specific rate assumption.</small>
++              </div>
++            </div>
++          </div>
++
++          <div class="results-card">
++            <div>
++              <h4>Estimated net proceeds</h4>
++              <div class="result-number" id="net-proceeds">$0</div>
++            </div>
++            <div class="breakdown" id="breakdown"></div>
++            <p class="inline-note">
++              This is an illustration, not a quote. Adjust the inputs to mirror your contract terms.
++            </p>
++          </div>
++        </div>
++
+         <div class="grid">
+           <!-- Sell vs Hold Calculator -->
+ <a
+   class="tool-card"
+   href="https://jasonknashville.github.io/sell-vs-rent-analyzer/"
+   target="_blank"
+   rel="noopener noreferrer"
+ >
+   <div class="tool-header">
+     <div class="tool-title">Sell vs Hold Analyzer</div>
+     <div class="tool-tag">Investor Tool</div>
+   </div>
+ 
+   <div class="tool-body">
+     Analyze whether it makes more financial sense to sell your property now or
+     hold it as a rental based on cash flow, equity, and appreciation.
+   </div>
+ 
+   <div class="tool-meta-row">
+     <div class="pill-meta">
+       <span>Great for:</span>
+       <span>Investors & accidental landlords</span>
+     </div>
+     <div class="meta-link">
+       <span>Open tool</span>
+@@ -496,27 +769,317 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+             <div class="tool-body">
+               See how much rent you’ll pay while waiting for lower rates — and how that compares
+               to the equity you could build by buying sooner.
+             </div>
+             <div class="tool-meta-row">
+               <div class="pill-meta">
+                 <span>Great for:</span>
+                 <span>Renters timing their first (or next) purchase</span>
+               </div>
+               <div class="meta-link">
+                 <span>Open tool</span>
+                 <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                   <path d="M7 4h9m0 0v9m0-9L7 13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+                 </svg>
+               </div>
+             </div>
+           </a>
+         </div>
+ 
+         <div class="bottom-row">
+           More tools coming soon — equity trackers, house-hacking scenarios, and seller net sheets.
+         </div>
+       </div>
+     </div>
+   </div>
++
++  <script>
++    const countyRates = {
++      Davidson: 0.0045,
++      Williamson: 0.0042,
++      Rutherford: 0.004,
++      Sumner: 0.0038,
++      Wilson: 0.0039,
++      Maury: 0.0037,
++      Montgomery: 0.0039,
++      Shelby: 0.0043,
++      Knox: 0.0038,
++      Hamilton: 0.004,
++      "Putnam": 0.0036,
++      "Madison": 0.0037,
++      "Washington": 0.0038,
++      "Sullivan": 0.0036,
++      "Blount": 0.0036,
++      "Sevier": 0.0037,
++      "Anderson": 0.0037,
++      default: 0.0038,
++    };
++
++    const counties = [
++      "Anderson",
++      "Bedford",
++      "Benton",
++      "Bledsoe",
++      "Blount",
++      "Bradley",
++      "Campbell",
++      "Cannon",
++      "Carroll",
++      "Carter",
++      "Cheatham",
++      "Chester",
++      "Claiborne",
++      "Clay",
++      "Cocke",
++      "Coffee",
++      "Crockett",
++      "Cumberland",
++      "Davidson",
++      "Decatur",
++      "DeKalb",
++      "Dickson",
++      "Dyer",
++      "Fayette",
++      "Fentress",
++      "Franklin",
++      "Gibson",
++      "Giles",
++      "Grainger",
++      "Greene",
++      "Grundy",
++      "Hamblen",
++      "Hamilton",
++      "Hancock",
++      "Hardeman",
++      "Hardin",
++      "Hawkins",
++      "Haywood",
++      "Henderson",
++      "Henry",
++      "Hickman",
++      "Houston",
++      "Humphreys",
++      "Jackson",
++      "Jefferson",
++      "Johnson",
++      "Knox",
++      "Lake",
++      "Lauderdale",
++      "Lawrence",
++      "Lewis",
++      "Lincoln",
++      "Loudon",
++      "Macon",
++      "Madison",
++      "Marion",
++      "Marshall",
++      "Maury",
++      "McMinn",
++      "McNairy",
++      "Meigs",
++      "Monroe",
++      "Montgomery",
++      "Moore",
++      "Morgan",
++      "Obion",
++      "Overton",
++      "Perry",
++      "Pickett",
++      "Polk",
++      "Putnam",
++      "Rhea",
++      "Roane",
++      "Robertson",
++      "Rutherford",
++      "Scott",
++      "Sequatchie",
++      "Sevier",
++      "Shelby",
++      "Smith",
++      "Stewart",
++      "Sullivan",
++      "Sumner",
++      "Tipton",
++      "Trousdale",
++      "Unicoi",
++      "Union",
++      "Van Buren",
++      "Warren",
++      "Washington",
++      "Wayne",
++      "Weakley",
++      "White",
++      "Williamson",
++      "Wilson",
++    ];
++
++    const countySelect = document.getElementById("county");
++    counties.forEach((county) => {
++      const option = document.createElement("option");
++      option.value = county;
++      option.textContent = county;
++      countySelect.appendChild(option);
++    });
++
++    const salePriceInput = document.getElementById("sale-price");
++    const closingDateInput = document.getElementById("closing-date");
++    const closingDatePicker = document.getElementById("closing-date-picker");
++    const openDatePickerBtn = document.getElementById("open-date-picker");
++    const propertyTaxInput = document.getElementById("property-tax");
++    const mortgagePayoffInput = document.getElementById("mortgage-payoff");
++    const commissionSlider = document.getElementById("commission");
++    const closingCostsSlider = document.getElementById("closing-costs");
++    const commissionValue = document.getElementById("commission-value");
++    const closingValue = document.getElementById("closing-value");
++    const netProceedsEl = document.getElementById("net-proceeds");
++    const breakdownEl = document.getElementById("breakdown");
++    const countyRow = document.getElementById("county-row");
++    const titleRadioButtons = document.querySelectorAll("input[name='title-insurance']");
++
++    function formatCurrency(value) {
++      return value.toLocaleString("en-US", {
++        style: "currency",
++        currency: "USD",
++        maximumFractionDigits: 0,
++      });
++    }
++
++    function parseDateInput(value) {
++      if (!value) return null;
++      const trimmed = value.trim();
++
++      const ddmmyyyy = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/;
++      const ddmmyy = /^(\d{1,2})\/(\d{1,2})\/(\d{2})$/;
++
++      if (ddmmyyyy.test(trimmed)) {
++        const [, d, m, y] = trimmed.match(ddmmyyyy);
++        return new Date(Number(y), Number(m) - 1, Number(d));
++      }
++
++      if (ddmmyy.test(trimmed)) {
++        const [, d, m, y] = trimmed.match(ddmmyy);
++        const fullYear = 2000 + Number(y);
++        return new Date(fullYear, Number(m) - 1, Number(d));
++      }
++
++      const isoDate = new Date(trimmed);
++      if (!Number.isNaN(isoDate)) return isoDate;
++      return null;
++    }
++
++    function formatAsDDMMYYYY(date) {
++      const dd = String(date.getDate()).padStart(2, "0");
++      const mm = String(date.getMonth() + 1).padStart(2, "0");
++      const yyyy = date.getFullYear();
++      return `${dd}/${mm}/${yyyy}`;
++    }
++
++    function getProratedTax(propertyTax, closingDate) {
++      if (!closingDate || Number.isNaN(propertyTax)) return 0;
++      const startOfYear = new Date(closingDate.getFullYear(), 0, 1);
++      const msPerDay = 1000 * 60 * 60 * 24;
++      const days = Math.max(0, Math.floor((closingDate - startOfYear) / msPerDay) + 1);
++      const daily = propertyTax / 365;
++      return daily * Math.min(days, 366);
++    }
++
++    function getTitleInsuranceCost(salePrice, county, isPaying) {
++      if (!isPaying) return 0;
++      const rate = countyRates[county] ?? countyRates.default;
++      return salePrice * rate;
++    }
++
++    function updateCalc() {
++      const salePrice = parseFloat(salePriceInput.value) || 0;
++      const propertyTax = parseFloat(propertyTaxInput.value) || 0;
++      const mortgagePayoff = parseFloat(mortgagePayoffInput.value) || 0;
++      const commissionPct = parseFloat(commissionSlider.value);
++      const closingPct = parseFloat(closingCostsSlider.value);
++
++      const closingDate = parseDateInput(closingDateInput.value) || parseDateInput(closingDatePicker.value);
++      if (closingDate && closingDatePicker.value === "") {
++        closingDatePicker.value = closingDate.toISOString().split("T")[0];
++      }
++
++      const commissionCost = salePrice * (commissionPct / 100);
++      const closingCosts = salePrice * (closingPct / 100);
++      const propertyTaxOwed = getProratedTax(propertyTax, closingDate);
++      const titleSelected = Array.from(titleRadioButtons).find((r) => r.checked)?.value === "yes";
++      const titleCost = getTitleInsuranceCost(salePrice, countySelect.value, titleSelected);
++
++      const totalDeductions = commissionCost + closingCosts + mortgagePayoff + propertyTaxOwed + titleCost;
++      const net = Math.max(0, salePrice - totalDeductions);
++
++      netProceedsEl.textContent = formatCurrency(net);
++
++      const breakdownItems = [
++        { label: "Sales price", value: salePrice },
++        { label: "Commission", value: commissionCost },
++        { label: "Closing costs", value: closingCosts },
++        { label: "Mortgage payoff", value: mortgagePayoff },
++        { label: closingDate ? `Property tax through ${formatAsDDMMYYYY(closingDate)}` : "Property tax (add a date)", value: propertyTaxOwed },
++        { label: titleSelected ? `Title insurance (${countySelect.value || "county"})` : "Title insurance", value: titleCost },
++      ];
++
++      breakdownEl.innerHTML = breakdownItems
++        .map(
++          (item) => `
++            <div class="breakdown-row">
++              <span>${item.label}</span>
++              <strong>${formatCurrency(item.value)}</strong>
++            </div>`
++        )
++        .join("");
++    }
++
++    commissionSlider.addEventListener("input", (e) => {
++      commissionValue.textContent = Number(e.target.value).toFixed(2);
++      updateCalc();
++    });
++
++    closingCostsSlider.addEventListener("input", (e) => {
++      closingValue.textContent = Number(e.target.value).toFixed(2);
++      updateCalc();
++    });
++
++    [salePriceInput, closingDateInput, propertyTaxInput, mortgagePayoffInput, countySelect].forEach((el) => {
++      el.addEventListener("input", updateCalc);
++    });
++
++    openDatePickerBtn.addEventListener("click", () => {
++      if (typeof closingDatePicker.showPicker === "function") {
++        closingDatePicker.showPicker();
++      } else {
++        closingDatePicker.classList.remove("hidden");
++        closingDatePicker.focus();
++      }
++    });
++
++    closingDatePicker.addEventListener("change", () => {
++      if (closingDatePicker.value) {
++        const chosen = new Date(closingDatePicker.value);
++        closingDateInput.value = formatAsDDMMYYYY(chosen);
++      }
++      updateCalc();
++    });
++
++    closingDateInput.addEventListener("blur", () => {
++      const parsed = parseDateInput(closingDateInput.value);
++      if (parsed) {
++        closingDateInput.value = formatAsDDMMYYYY(parsed);
++        closingDatePicker.value = parsed.toISOString().split("T")[0];
++      }
++      updateCalc();
++    });
++
++    titleRadioButtons.forEach((radio) => {
++      radio.addEventListener("change", () => {
++        const show = radio.value === "yes";
++        countyRow.classList.toggle("hidden", !show);
++        updateCalc();
++      });
++    });
++
++    updateCalc();
++  </script>
+ </body>
+ </html>
