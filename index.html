@@ -1,6 +1,17 @@
 <!doctype html>
 <html lang="en">
 <head>
+  <!-- Google Tag Manager -->
+  
+  <script>
+    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-MH9X9NGV');
+  </script>
+  <!-- End Google Tag Manager -->
+
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Cost to Sell Calculator • Tennessee</title>
@@ -72,7 +83,7 @@
     .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
     @media (max-width: 600px){ .row{grid-template-columns:1fr} }
     label{display:block;font-size:12px;color:var(--muted);margin:0 0 6px}
-    input[type="text"], input[type="number"], select{
+    input[type="text"], select{
       width:100%;
       background:rgba(255,255,255,.04);
       border:1px solid rgba(255,255,255,.12);
@@ -168,12 +179,18 @@
   </style>
 </head>
 <body>
+  <!-- Google Tag Manager (noscript) -->
+  <!-- TODO: Replace GTM-XXXXXXX with your container ID -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
   <div class="wrap">
 
     <div class="card top">
       <div class="brand">
         <h1>Cost to Sell Calculator (Tennessee)</h1>
-        <p>Quick net-proceeds estimate: sale price minus commission, closing costs, prorated taxes, payoff, and optional title premium.</p>
+        <p>Quick net-proceeds estimate: sale price minus commission, closing costs, prorated taxes, payoff, estimated repairs, and optional title premium.</p>
         <div class="badgeRow">
           <div class="pill">Commission slider: 0–8% (0.25% steps)</div>
           <div class="pill">Closing costs slider: 0.5–10%</div>
@@ -189,7 +206,7 @@
       <div class="card">
         <div class="cardHeader">
           <h2>Inputs</h2>
-          <div class="small">Blank payoff defaults to $0</div>
+          <div class="small">Blank payoff/repairs default to $0</div>
         </div>
         <div class="cardBody">
 
@@ -252,10 +269,27 @@
                   <span>10%</span>
                 </div>
               </div>
-              <div class="small" style="margin-top:6px;color:var(--muted);">
-                This is a % placeholder for seller-paid closing costs (varies by deal).
+
+              <div class="small" style="margin-top:8px;color:var(--muted);line-height:1.45;">
+                <strong>About closing costs:</strong> Every sale has baseline seller closing costs (title company/settlement fees, recording, etc.),
+                often starting around <strong>~0.5%</strong>. Some deals also include a buyer request for the seller to help with closing costs.
+                This calculator assumes a default of <strong>2%</strong> total (seller costs + <em>some</em> buyer assistance). Adjust as needed.
               </div>
             </div>
+          </div>
+
+          <div style="height:12px"></div>
+
+          <!-- NEW: Estimated repairs -->
+          <div class="row">
+            <div>
+              <label for="estimatedRepairs">Estimated repairs / credits (optional)</label>
+              <input id="estimatedRepairs" type="text" placeholder="Leave blank for $0" inputmode="decimal" />
+              <div class="small" style="margin-top:6px;color:var(--muted);">
+                Use this for repair items, negotiated credits, or pre-list punch-list spend you want included in the estimate.
+              </div>
+            </div>
+            <div></div>
           </div>
 
           <div style="height:12px"></div>
@@ -361,7 +395,6 @@
     const str = String(s).trim();
     if (!str) return null;
 
-    // yyyy-mm-dd
     const iso = str.match(/^(\d{4})-(\d{2})-(\d{2})$/);
     if (iso) {
       const y = Number(iso[1]), m = Number(iso[2]) - 1, d = Number(iso[3]);
@@ -405,8 +438,6 @@
   }
 
   // ---------- Title premium estimate ----------
-  // Same schedule structure you had before (special counties + all other TN).
-  // If you prefer: we can remove the auto-estimate entirely and require override input.
   function ceilToThousand(x) { return Math.ceil(x / 1000) * 1000; }
 
   function premiumBySchedule(amount, sched) {
@@ -433,12 +464,12 @@
     A: { // Montgomery, Rutherford, Sumner, Williamson
       baseCap: 1000, baseCharge: 200, minimum: 200,
       tiers: [
-        { cap:  99000, ratePerThousand: 6.50 },     // 1k -> 100k
-        { cap: 400000, ratePerThousand: 4.80 },     // 100k -> 500k
-        { cap: 500000, ratePerThousand: 3.15 },     // 500k -> 1M
-        { cap:4000000, ratePerThousand: 2.10 },     // 1M -> 5M
-        { cap:5000000, ratePerThousand: 1.60 },     // 5M -> 10M
-        { cap:5000000, ratePerThousand: 1.35 },     // 10M -> 15M
+        { cap:  99000, ratePerThousand: 6.50 },
+        { cap: 400000, ratePerThousand: 4.80 },
+        { cap: 500000, ratePerThousand: 3.15 },
+        { cap:4000000, ratePerThousand: 2.10 },
+        { cap:5000000, ratePerThousand: 1.60 },
+        { cap:5000000, ratePerThousand: 1.35 },
         { cap:Infinity, ratePerThousand: 1.35 }
       ]
     },
@@ -446,10 +477,10 @@
       baseCap: 1000, baseCharge: 200, minimum: 200,
       tiers: [
         { cap:  99000, ratePerThousand: 6.50 },
-        { cap: 900000, ratePerThousand: 3.20 },     // 100k -> 1M
-        { cap:4000000, ratePerThousand: 2.10 },     // 1M -> 5M
-        { cap:5000000, ratePerThousand: 1.60 },     // 5M -> 10M
-        { cap:5000000, ratePerThousand: 1.35 },     // 10M -> 15M
+        { cap: 900000, ratePerThousand: 3.20 },
+        { cap:4000000, ratePerThousand: 2.10 },
+        { cap:5000000, ratePerThousand: 1.60 },
+        { cap:5000000, ratePerThousand: 1.35 },
         { cap:Infinity, ratePerThousand: 1.35 }
       ]
     },
@@ -468,30 +499,30 @@
       baseCap: 1000, baseCharge: 220, minimum: 220,
       tiers: [
         { cap:  99000, ratePerThousand: 4.40 },
-        { cap: 900000, ratePerThousand: 3.30 },     // 100k -> 1M
-        { cap:Infinity, ratePerThousand: 1.10 }     // > 1M
+        { cap: 900000, ratePerThousand: 3.30 },
+        { cap:Infinity, ratePerThousand: 1.10 }
       ]
     },
     G: { // Davidson
       baseCap: 1000, baseCharge: 200, minimum: 200,
       tiers: [
         { cap:  99000, ratePerThousand: 6.50 },
-        { cap: 400000, ratePerThousand: 4.80 },     // 100k -> 500k
-        { cap: 500000, ratePerThousand: 3.15 },     // 500k -> 1M
-        { cap:4000000, ratePerThousand: 2.10 },     // 1M -> 5M
-        { cap:5000000, ratePerThousand: 1.60 },     // 5M -> 10M
-        { cap:5000000, ratePerThousand: 1.35 },     // 10M -> 15M
+        { cap: 400000, ratePerThousand: 4.80 },
+        { cap: 500000, ratePerThousand: 3.15 },
+        { cap:4000000, ratePerThousand: 2.10 },
+        { cap:5000000, ratePerThousand: 1.60 },
+        { cap:5000000, ratePerThousand: 1.35 },
         { cap:Infinity, ratePerThousand: 1.35 }
       ]
     },
     E: { // All other TN (approx schedule)
       baseCap: 50000, baseCharge: 4.50 * 50, minimum: 165,
       tiers: [
-        { cap:  50000, ratePerThousand: 3.75 },      // 50k -> 100k
-        { cap:1900000, ratePerThousand: 2.65 },      // 100k -> 2M
-        { cap:3000000, ratePerThousand: 2.50 },      // 2M -> 5M
-        { cap:5000000, ratePerThousand: 1.60 },      // 5M -> 10M
-        { cap:5000000, ratePerThousand: 1.35 },      // 10M -> 15M
+        { cap:  50000, ratePerThousand: 3.75 },
+        { cap:1900000, ratePerThousand: 2.65 },
+        { cap:3000000, ratePerThousand: 2.50 },
+        { cap:5000000, ratePerThousand: 1.60 },
+        { cap:5000000, ratePerThousand: 1.35 },
         { cap:Infinity, ratePerThousand: 1.35 }
       ]
     }
@@ -512,7 +543,6 @@
     return premiumBySchedule(salePrice, schedules[key]);
   }
 
-  // ---------- Counties ----------
   const TN_COUNTIES = [
     "Anderson","Bedford","Benton","Bledsoe","Blount","Bradley","Campbell","Cannon","Carroll","Carter","Cheatham",
     "Chester","Claiborne","Clay","Cocke","Coffee","Crockett","Cumberland","Davidson","Decatur","DeKalb","Dickson",
@@ -529,13 +559,17 @@
   const salePriceEl = document.getElementById("salePrice");
   const mortgagePayoffEl = document.getElementById("mortgagePayoff");
   const propertyTaxEl = document.getElementById("propertyTax");
+  const repairsEl = document.getElementById("estimatedRepairs");
+
   const closingTextEl = document.getElementById("closingDateText");
   const closingPickerEl = document.getElementById("closingDatePicker");
   const openPickerBtn = document.getElementById("openDatePicker");
+
   const commissionEl = document.getElementById("commission");
   const closingCostsEl = document.getElementById("closingCosts");
   const commissionLabel = document.getElementById("commissionLabel");
   const closingCostsLabel = document.getElementById("closingCostsLabel");
+
   const countyRow = document.getElementById("countyRow");
   const countyEl = document.getElementById("county");
   const titleOverrideEl = document.getElementById("titleOverride");
@@ -546,7 +580,6 @@
   const breakdownEl = document.getElementById("breakdown");
   const assumptionsEl = document.getElementById("assumptions");
 
-  // populate counties
   countyEl.innerHTML = TN_COUNTIES.map(c => `<option value="${c}">${c} County</option>`).join("");
   countyEl.value = "Davidson";
 
@@ -575,7 +608,6 @@
   closingTextEl.addEventListener("blur", () => {
     const d = parseDateFlexible(closingTextEl.value);
     if (d) {
-      // sync picker to ISO
       const y = d.getFullYear();
       const m = String(d.getMonth()+1).padStart(2,"0");
       const dd = String(d.getDate()).padStart(2,"0");
@@ -595,7 +627,7 @@
   }
 
   [
-    salePriceEl, mortgagePayoffEl, propertyTaxEl,
+    salePriceEl, mortgagePayoffEl, propertyTaxEl, repairsEl,
     closingTextEl, commissionEl, closingCostsEl,
     countyEl, titleOverrideEl
   ].forEach(el => el.addEventListener("input", update));
@@ -614,13 +646,13 @@
     const salePrice = cleanNumber(salePriceEl.value);
     const payoff = cleanNumber(mortgagePayoffEl.value);
     const annualTax = cleanNumber(propertyTaxEl.value);
+    const repairs = cleanNumber(repairsEl.value);
 
     const commissionPct = clamp(Number(commissionEl.value) / 100, 0, 0.08);
     const closingCostsPct = clamp(Number(closingCostsEl.value) / 100, 0.005, 0.10);
 
     const closingDate = parseDateFlexible(closingTextEl.value) || parseDateFlexible(closingPickerEl.value);
 
-    // property tax proration: annual / 365 * day-of-year
     let taxProration = 0;
     let doy = null;
     if (closingDate && isValidDate(closingDate) && annualTax > 0) {
@@ -631,17 +663,15 @@
     const commission = salePrice * commissionPct;
     const closingCosts = salePrice * closingCostsPct;
 
-    // title
     const titleYes = getTitleChoice() === "yes";
     const county = countyEl.value;
     let titlePremium = 0;
-
     if (titleYes && salePrice > 0) {
       const override = cleanNumber(titleOverrideEl.value);
       titlePremium = override > 0 ? override : estimateTitlePremium(salePrice, county);
     }
 
-    const totalCosts = commission + closingCosts + taxProration + payoff + titlePremium;
+    const totalCosts = commission + closingCosts + taxProration + payoff + repairs + titlePremium;
     const net = salePrice - totalCosts;
 
     salePriceOut.textContent = fmtMoney(salePrice);
@@ -656,6 +686,7 @@
     addLine(`Closing costs (${(closingCostsPct*100).toFixed(2)}%)`, closingCosts);
     addLine(`Prorated property tax`, taxProration);
     addLine(`Mortgage payoff`, payoff);
+    addLine(`Estimated repairs / credits`, repairs);
     if (titleYes) addLine(`Title insurance (estimate)`, titlePremium);
 
     const dateText = (closingDate && isValidDate(closingDate)) ? formatAsMMDDYYYY(closingDate) : "—";
@@ -679,3 +710,4 @@
 </script>
 </body>
 </html>
+
