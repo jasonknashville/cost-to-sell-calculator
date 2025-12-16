@@ -365,35 +365,51 @@
   // - dd/mm/yy or dd/mm/yyyy
   // - dd-mm-yy or dd-mm-yyyy
   // If ambiguous, we treat first chunk as day (your request is dd/mm).
-  function parseDateFlexible(s) {
-    if (!s) return null;
-    const str = String(s).trim();
-    if (!str) return null;
+function parseDateFlexible(s) {
+  if (!s) return null;
+  const str = String(s).trim();
+  if (!str) return null;
 
-    // yyyy-mm-dd
-    const iso = str.match(/^(\d{4})-(\d{2})-(\d{2})$/);
-    if (iso) {
-      const y = Number(iso[1]), m = Number(iso[2]) - 1, d = Number(iso[3]);
-      const dt = new Date(y, m, d);
-      return isValidDate(dt) ? dt : null;
-    }
-
-    // dd/mm/yy(yy) or dd-mm/yy(yy)
-    const m = str.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2}|\d{4})$/);
-    if (m) {
-      let dd = Number(m[1]);
-      let mm = Number(m[2]);
-      let yy = Number(m[3]);
-      if (m[3].length === 2) yy += (yy >= 70 ? 1900 : 2000);
-      // force dd/mm interpretation
-      const dt = new Date(yy, mm - 1, dd);
-      // reject overflow (e.g. 32/13)
-      if (dt.getFullYear() !== yy || dt.getMonth() !== (mm - 1) || dt.getDate() !== dd) return null;
-      return dt;
-    }
-
-    return null;
+  // yyyy-mm-dd (from date input)
+  const iso = str.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (iso) {
+    const y = Number(iso[1]), m = Number(iso[2]) - 1, d = Number(iso[3]);
+    const dt = new Date(y, m, d);
+    if (dt.getFullYear() !== y || dt.getMonth() !== m || dt.getDate() !== d) return null;
+    return dt;
   }
+
+  // mm/dd/yy(yy) OR dd/mm/yy(yy) with ambiguity handling
+  const m = str.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2}|\d{4})$/);
+  if (m) {
+    let a = Number(m[1]); // could be month or day
+    let b = Number(m[2]); // could be day or month
+    let yy = Number(m[3]);
+    if (m[3].length === 2) yy += (yy >= 70 ? 1900 : 2000);
+
+    // Decide whether it's mm/dd or dd/mm
+    // - If a > 12 => must be dd/mm
+    // - If b > 12 => must be mm/dd
+    // - If both <= 12 => default to mm/dd (US-friendly)
+    let month, day;
+    if (a > 12 && b <= 12) {
+      day = a; month = b;              // dd/mm
+    } else if (b > 12 && a <= 12) {
+      month = a; day = b;              // mm/dd
+    } else {
+      month = a; day = b;              // ambiguous -> mm/dd default
+    }
+
+    if (month < 1 || month > 12 || day < 1 || day > 31) return null;
+
+    const dt = new Date(yy, month - 1, day);
+    if (dt.getFullYear() !== yy || dt.getMonth() !== (month - 1) || dt.getDate() !== day) return null;
+    return dt;
+  }
+
+  return null;
+}
+
 
   function dayOfYear(date) {
     const start = new Date(date.getFullYear(), 0, 1);
