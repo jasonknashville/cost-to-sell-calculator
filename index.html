@@ -3,20 +3,21 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Cost to Sell Calculator • Net Proceeds</title>
-  <meta name="description" content="Estimate seller closing costs and net proceeds. Nashville-area friendly defaults." />
+  <title>TN Cost to Sell Calculator • Estimated Net Proceeds</title>
+  <meta name="description" content="Estimate net proceeds from selling a property in Tennessee: commission, closing costs, tax proration, payoff, and optional title insurance." />
+
   <style>
     :root{
-      --bg:#0f172a;         /* slate-900 */
-      --panel:#0b1220;      /* deep */
-      --card:#0b1a33;       /* navy */
-      --muted:#94a3b8;      /* slate-400 */
-      --text:#e2e8f0;       /* slate-200 */
-      --line:#1e293b;       /* slate-800 */
-      --accent:#38bdf8;     /* sky-400 */
-      --good:#34d399;       /* emerald-400 */
-      --warn:#fbbf24;       /* amber-400 */
-      --bad:#fb7185;        /* rose-400 */
+      --bg:#0f172a;
+      --panel:#0b1220;
+      --card:#0b1a33;
+      --muted:#94a3b8;
+      --text:#e2e8f0;
+      --line:#1e293b;
+      --accent:#38bdf8;
+      --good:#34d399;
+      --warn:#fbbf24;
+      --bad:#fb7185;
       --shadow: 0 12px 30px rgba(0,0,0,.35);
       --radius: 18px;
     }
@@ -25,9 +26,10 @@
       margin:0;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
       color:var(--text);
-      background: radial-gradient(1200px 600px at 20% 0%, rgba(56,189,248,.18), transparent 60%),
-                  radial-gradient(900px 500px at 90% 10%, rgba(52,211,153,.12), transparent 55%),
-                  var(--bg);
+      background:
+        radial-gradient(1200px 600px at 18% 0%, rgba(56,189,248,.18), transparent 60%),
+        radial-gradient(900px 500px at 90% 10%, rgba(52,211,153,.12), transparent 55%),
+        var(--bg);
       min-height:100vh;
     }
     .wrap{max-width:1120px;margin:0 auto;padding:26px 16px 60px}
@@ -53,22 +55,21 @@
       background: rgba(11,18,32,.6);
       color:var(--text);
       padding:10px 12px;border-radius:12px;
-      font-weight:600;font-size:13px;cursor:pointer;
+      font-weight:700;font-size:13px;cursor:pointer;
       transition: transform .06s ease, border-color .2s ease, background .2s ease;
       user-select:none;
     }
     .btn:hover{border-color:rgba(56,189,248,.6); background: rgba(11,26,51,.75)}
     .btn:active{transform: translateY(1px)}
     .btn.primary{border-color:rgba(56,189,248,.7); background: rgba(56,189,248,.12)}
+
     .grid{
       margin-top:16px;
       display:grid; gap:16px;
       grid-template-columns: 1.05fr .95fr;
     }
-    @media (max-width: 920px){
-      .grid{grid-template-columns:1fr}
-      .actions{justify-content:flex-start}
-    }
+    @media (max-width: 920px){ .grid{grid-template-columns:1fr} .actions{justify-content:flex-start} }
+
     .card{
       border:1px solid var(--line);
       background: linear-gradient(180deg, rgba(11,18,32,.7), rgba(11,18,32,.45));
@@ -82,7 +83,8 @@
       border-bottom:1px solid rgba(30,41,59,.8);
       display:flex;align-items:center;justify-content:space-between;gap:10px;
     }
-    .sub{color:var(--muted);font-size:12px;font-weight:500}
+    .sub{color:var(--muted);font-size:12px;font-weight:600}
+
     .body{padding:16px}
     .row{display:grid;gap:10px;grid-template-columns: 1fr 1fr}
     @media (max-width: 520px){ .row{grid-template-columns:1fr} }
@@ -102,6 +104,7 @@
     input:focus, select:focus{border-color: rgba(56,189,248,.75)}
     .hint{margin:8px 0 0;font-size:12px;color:var(--muted);line-height:1.3}
     .sep{height:1px;background:rgba(30,41,59,.8);margin:14px 0}
+
     .toggle{
       display:flex;gap:10px;align-items:center;flex-wrap:wrap;
       padding:10px 12px;border:1px solid rgba(30,41,59,.9);
@@ -113,13 +116,31 @@
       border:1px solid rgba(30,41,59,.9);
       background: rgba(11,18,32,.35);
       cursor:pointer; user-select:none;
-      font-size:13px; font-weight:700;
+      font-size:13px; font-weight:800;
     }
     .toggle input{display:none}
     .toggle .pill.active{
       border-color: rgba(56,189,248,.75);
       background: rgba(56,189,248,.14);
     }
+
+    .sliderWrap{
+      border:1px solid rgba(30,41,59,.9);
+      background: rgba(2,6,23,.22);
+      border-radius: 14px;
+      padding:12px;
+    }
+    .sliderTop{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+    .valueChip{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:6px 10px;border-radius:999px;
+      border:1px solid rgba(56,189,248,.35);
+      background: rgba(56,189,248,.10);
+      color: var(--text);
+      font-size:12px;font-weight:800;
+      white-space:nowrap;
+    }
+    input[type="range"]{width:100%}
 
     .resultBox{
       display:grid; gap:12px;
@@ -137,6 +158,7 @@
     .metric .v.good{color:var(--good)}
     .metric .v.bad{color:var(--bad)}
     .metric .v.warn{color:var(--warn)}
+
     .breakdown{
       margin-top:12px;
       border:1px solid rgba(30,41,59,.9);
@@ -149,14 +171,25 @@
       font-size:13px;
     }
     th, td{padding:10px 12px;border-bottom:1px solid rgba(30,41,59,.8)}
-    th{color:var(--muted);font-weight:700;text-align:left;background: rgba(11,18,32,.25)}
+    th{color:var(--muted);font-weight:800;text-align:left;background: rgba(11,18,32,.25)}
     td:last-child{text-align:right;font-variant-numeric: tabular-nums}
     tr:last-child td{border-bottom:none}
+
     .note{
       margin-top:12px;
       color:var(--muted);
       font-size:12px;
       line-height:1.4;
+    }
+    .error{
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius: 14px;
+      border:1px solid rgba(251,113,133,.5);
+      background: rgba(251,113,133,.10);
+      color: var(--text);
+      font-size:12px;
+      display:none;
     }
     .footer{
       margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;
@@ -164,15 +197,23 @@
     }
     a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
-    .badge{
-      display:inline-flex;align-items:center;gap:8px;
-      padding:6px 10px;border-radius:999px;
-      border:1px solid rgba(56,189,248,.35);
-      background: rgba(56,189,248,.10);
-      color: var(--text);
-      font-size:12px;font-weight:700;
-      white-space:nowrap;
+
+    .dateRow{
+      display:grid;
+      grid-template-columns: 1fr auto;
+      gap:10px;
+      align-items:end;
     }
+    .iconBtn{
+      height:42px; min-width:42px;
+      border-radius:12px;
+      border:1px solid rgba(30,41,59,.9);
+      background: rgba(2,6,23,.35);
+      color: var(--text);
+      cursor:pointer;
+      display:grid;place-items:center;
+    }
+    .iconBtn:hover{border-color:rgba(56,189,248,.6)}
   </style>
 </head>
 
@@ -187,8 +228,8 @@
           </svg>
         </div>
         <div class="title">
-          <h1>Cost to Sell Calculator</h1>
-          <p>Estimate seller costs + net proceeds (with Nashville-area friendly defaults)</p>
+          <h1>TN Cost to Sell Calculator</h1>
+          <p>Estimated net proceeds = sale price − (tax proration + commission + closing costs + payoff + optional title)</p>
         </div>
       </div>
       <div class="actions">
@@ -200,11 +241,499 @@
     <div class="grid">
       <!-- INPUTS -->
       <div class="card">
-        <h2>
-          Inputs
-          <span class="sub">Auto-calculates as you type</span>
-        </h2>
+        <h2>Inputs <span class="sub">Auto-calculates as you type</span></h2>
         <div class="body">
+
           <div class="row">
             <div class="field">
-              <label for="salePrice">Expected sale price</label>
+              <label for="salePrice">Estimated sale price</label>
+              <input id="salePrice" inputmode="decimal" placeholder="e.g. 500000" />
+              <div class="hint">Commas are okay — we’ll clean them automatically.</div>
+            </div>
+
+            <div class="field">
+              <label for="mortgagePayoff">Mortgage payoff (if any)</label>
+              <input id="mortgagePayoff" inputmode="decimal" placeholder="Leave blank for $0" />
+              <div class="hint">If left blank, we treat it as $0.</div>
+            </div>
+          </div>
+
+          <div class="sep"></div>
+
+          <div class="row">
+            <div class="field">
+              <label>Closing date (type or pick)</label>
+              <div class="dateRow">
+                <div>
+                  <input id="closingDateText" inputmode="numeric" placeholder="dd/mm/yyyy (or dd/mm/yy)" />
+                  <div class="hint">You can type <strong>dd/mm/yy</strong> or <strong>dd/mm/yyyy</strong>.</div>
+                </div>
+                <button class="iconBtn" id="openDateBtn" type="button" title="Pick a date">📅</button>
+              </div>
+              <!-- hidden date input to use native picker -->
+              <input id="closingDatePicker" type="date" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" />
+            </div>
+
+            <div class="field">
+              <label for="propertyTax">Annual property tax ($)</label>
+              <input id="propertyTax" inputmode="decimal" placeholder="e.g. 3600" />
+              <div class="hint">We prorate: (tax ÷ 365) × days from Jan 1 → closing date.</div>
+            </div>
+          </div>
+
+          <div class="error" id="dateError"></div>
+
+          <div class="sep"></div>
+
+          <div class="field">
+            <label>Real estate commission</label>
+            <div class="sliderWrap">
+              <div class="sliderTop">
+                <div class="sub">0% to 8% (step 0.25%)</div>
+                <div class="valueChip"><span id="commissionPctOut">5.00%</span></div>
+              </div>
+              <input id="commissionPct" type="range" min="0" max="8" step="0.25" value="5" />
+              <div class="hint">Default is <strong>5%</strong>. Adjust as needed.</div>
+            </div>
+          </div>
+
+          <div class="field" style="margin-top:12px;">
+            <label>Closing costs</label>
+            <div class="sliderWrap">
+              <div class="sliderTop">
+                <div class="sub">0.5% to 10% (step 0.25%)</div>
+                <div class="valueChip"><span id="closingCostPctOut">2.00%</span></div>
+              </div>
+              <input id="closingCostPct" type="range" min="0.5" max="10" step="0.25" value="2" />
+              <div class="hint">Default is <strong>2%</strong>. (Estimate only.)</div>
+            </div>
+          </div>
+
+          <div class="sep"></div>
+
+          <div class="row">
+            <div class="field">
+              <label>Paying title insurance?</label>
+              <div class="toggle" id="titleToggle">
+                <label class="pill active"><input type="radio" name="titleYesNo" value="no" checked> No</label>
+                <label class="pill"><input type="radio" name="titleYesNo" value="yes"> Yes</label>
+              </div>
+              <div class="hint">If “Yes,” a TN county list appears.</div>
+            </div>
+
+            <div class="field" id="countyWrap" style="display:none;">
+              <label for="countySelect">County (Tennessee)</label>
+              <select id="countySelect"></select>
+              <div class="hint">Used for your record/logic. (Rates vary — see estimate input below.)</div>
+            </div>
+          </div>
+
+          <div class="row" id="titleEstimateRow" style="display:none; margin-top:10px;">
+            <div class="field">
+              <label for="titleInsuranceEstimate">Title insurance estimate ($)</label>
+              <input id="titleInsuranceEstimate" inputmode="decimal" placeholder="e.g. 1500" />
+              <div class="hint">Optional estimate. If blank, we’ll use $0.</div>
+            </div>
+            <div class="field">
+              <label for="notes">Notes (optional)</label>
+              <input id="notes" placeholder="Anything you want to remember…" />
+              <div class="hint">This field doesn’t affect the math.</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- OUTPUTS -->
+      <div class="card">
+        <h2>Results <span class="sub">Live estimate</span></h2>
+        <div class="body">
+
+          <div class="resultBox">
+            <div class="metric">
+              <p class="k">Estimated net proceeds</p>
+              <p class="v good" id="netProceeds">$0</p>
+            </div>
+            <div class="metric">
+              <p class="k">Total estimated costs</p>
+              <p class="v bad" id="totalCosts">$0</p>
+            </div>
+            <div class="metric">
+              <p class="k">Commission</p>
+              <p class="v" id="commissionCost">$0</p>
+            </div>
+            <div class="metric">
+              <p class="k">Tax proration</p>
+              <p class="v" id="taxProrationCost">$0</p>
+            </div>
+          </div>
+
+          <div class="breakdown" style="margin-top:14px;">
+            <table aria-label="Breakdown">
+              <thead>
+                <tr>
+                  <th>Line item</th>
+                  <th style="text-align:right;">Estimate</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Sale price</td><td id="salePriceOut">$0</td></tr>
+                <tr><td>Property tax proration</td><td id="taxLine">$0</td></tr>
+                <tr><td>Real estate commission</td><td id="commissionLine">$0</td></tr>
+                <tr><td>Closing costs</td><td id="closingCostsLine">$0</td></tr>
+                <tr><td>Title insurance</td><td id="titleLine">$0</td></tr>
+                <tr><td><strong>Mortgage payoff</strong></td><td id="payoffLine">$0</td></tr>
+                <tr><td><strong>Total costs + payoff</strong></td><td id="totalAllLine"><strong>$0</strong></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="note" id="note">
+            Date proration assumes a 365-day year and uses “days from Jan 1 through the closing date.”
+            Real closings can prorate differently depending on the settlement statement and local tax cycle.
+          </div>
+
+          <div class="footer">
+            <div>Single-file • GitHub Pages / KV-friendly</div>
+            <div><a href="#" id="printLink">Print / Save PDF</a></div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+<script>
+  // ---------- TN Counties ----------
+  const TN_COUNTIES = [
+    "Anderson","Bedford","Benton","Bledsoe","Blount","Bradley","Campbell","Cannon","Carroll","Carter",
+    "Cheatham","Chester","Claiborne","Clay","Cocke","Coffee","Crockett","Cumberland","Davidson","Decatur",
+    "DeKalb","Dickson","Dyer","Fayette","Fentress","Franklin","Gibson","Giles","Grainger","Greene",
+    "Grundy","Hamblen","Hamilton","Hancock","Hardeman","Hardin","Hawkins","Haywood","Henderson","Henry",
+    "Hickman","Houston","Humphreys","Jackson","Jefferson","Johnson","Knox","Lake","Lauderdale","Lawrence",
+    "Lewis","Lincoln","Loudon","McMinn","McNairy","Macon","Madison","Marion","Marshall","Maury",
+    "Meigs","Monroe","Montgomery","Moore","Morgan","Obion","Overton","Perry","Pickett","Polk",
+    "Putnam","Rhea","Roane","Robertson","Rutherford","Scott","Sequatchie","Sevier","Shelby","Smith",
+    "Stewart","Sullivan","Sumner","Tipton","Trousdale","Unicoi","Union","Van Buren","Warren","Washington",
+    "Wayne","Weakley","White","Williamson","Wilson"
+  ];
+
+  // ---------- helpers ----------
+  const $ = (id) => document.getElementById(id);
+
+  function toNumber(val){
+    if (val === null || val === undefined) return 0;
+    const cleaned = String(val).replace(/[^0-9.\-]/g,'');
+    const n = parseFloat(cleaned);
+    return isFinite(n) ? n : 0;
+  }
+
+  function money(n){
+    const sign = n < 0 ? "-" : "";
+    const abs = Math.abs(n);
+    return sign + abs.toLocaleString(undefined, {style:"currency", currency:"USD", maximumFractionDigits:0});
+  }
+
+  function clamp(n, min, max){ return Math.min(Math.max(n, min), max); }
+
+  function pad2(n){ return String(n).padStart(2,"0"); }
+
+  // Parse dd/mm/yy or dd/mm/yyyy
+  function parseDDMM(dateStr){
+    const s = String(dateStr || "").trim();
+    if (!s) return { ok:false, date:null, msg:"" };
+
+    // Allow separators / or - or .
+    const m = s.match(/^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{2}|\d{4})$/);
+    if (!m) return { ok:false, date:null, msg:"Use dd/mm/yy or dd/mm/yyyy (e.g. 05/01/2026)." };
+
+    let dd = parseInt(m[1],10);
+    let mm = parseInt(m[2],10);
+    let yy = parseInt(m[3],10);
+
+    if (m[3].length === 2){
+      // Interpret 00-79 as 2000-2079, 80-99 as 1980-1999
+      yy = yy <= 79 ? 2000 + yy : 1900 + yy;
+    }
+
+    if (mm < 1 || mm > 12) return { ok:false, date:null, msg:"Month must be 1–12." };
+    if (dd < 1 || dd > 31) return { ok:false, date:null, msg:"Day must be 1–31." };
+
+    // JS Date months are 0-based
+    const d = new Date(yy, mm - 1, dd, 12, 0, 0);
+    // Validate round-trip
+    if (d.getFullYear() !== yy || d.getMonth() !== (mm - 1) || d.getDate() !== dd){
+      return { ok:false, date:null, msg:"That date doesn't look valid. Check day/month." };
+    }
+    return { ok:true, date:d, msg:"" };
+  }
+
+  function dateToISO(d){
+    return `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`;
+  }
+
+  function dateToDDMMYYYY(d){
+    return `${pad2(d.getDate())}/${pad2(d.getMonth()+1)}/${d.getFullYear()}`;
+  }
+
+  // Days from Jan 1 through closing date (inclusive)
+  function daysFromJan1Inclusive(d){
+    const start = new Date(d.getFullYear(), 0, 1, 12, 0, 0);
+    const diffDays = Math.floor((d - start) / (1000*60*60*24)) + 1;
+    return clamp(diffDays, 1, 366);
+  }
+
+  // ---------- defaults ----------
+  const defaults = {
+    salePrice: 500000,
+    propertyTax: 3600,
+    mortgagePayoff: 0,
+    commissionPct: 5,
+    closingCostPct: 2,
+    closingDateText: (() => {
+      const d = new Date();
+      d.setDate(d.getDate() + 21);
+      return dateToDDMMYYYY(d);
+    })(),
+    titleYesNo: "no",
+    county: "Davidson",
+    titleInsuranceEstimate: 0
+  };
+
+  function populateCounties(){
+    const sel = $("countySelect");
+    sel.innerHTML = "";
+    TN_COUNTIES.forEach(c => {
+      const opt = document.createElement("option");
+      opt.value = c;
+      opt.textContent = c + " County";
+      sel.appendChild(opt);
+    });
+  }
+
+  function setDefaults(){
+    $("salePrice").value = defaults.salePrice;
+    $("propertyTax").value = defaults.propertyTax;
+    $("mortgagePayoff").value = "";
+    $("commissionPct").value = defaults.commissionPct;
+    $("closingCostPct").value = defaults.closingCostPct;
+    $("closingDateText").value = defaults.closingDateText;
+
+    $("titleInsuranceEstimate").value = "";
+    $("notes").value = "";
+
+    // Toggle set
+    setTitleToggle(defaults.titleYesNo);
+    $("countySelect").value = defaults.county;
+
+    // Sync picker date based on text default
+    const parsed = parseDDMM($("closingDateText").value);
+    if (parsed.ok) $("closingDatePicker").value = dateToISO(parsed.date);
+
+    updateCalc();
+  }
+
+  // ---------- title toggle ----------
+  function setTitleToggle(value){
+    const pills = Array.from(document.querySelectorAll("#titleToggle .pill"));
+    pills.forEach(p => p.classList.remove("active"));
+    pills.forEach(p => {
+      const r = p.querySelector("input");
+      if (r.value === value){
+        r.checked = true;
+        p.classList.add("active");
+      }
+    });
+
+    const show = value === "yes";
+    $("countyWrap").style.display = show ? "" : "none";
+    $("titleEstimateRow").style.display = show ? "" : "none";
+    updateCalc();
+  }
+
+  document.querySelectorAll("#titleToggle input[name='titleYesNo']").forEach(r => {
+    r.addEventListener("change", () => setTitleToggle(r.value));
+  });
+  document.querySelectorAll("#titleToggle .pill").forEach(p => {
+    p.addEventListener("click", () => {
+      const r = p.querySelector("input");
+      r.checked = true;
+      setTitleToggle(r.value);
+    });
+  });
+
+  // ---------- date picker wiring ----------
+  $("openDateBtn").addEventListener("click", () => {
+    const picker = $("closingDatePicker");
+    // Try to open native picker where supported
+    if (typeof picker.showPicker === "function") picker.showPicker();
+    else picker.click();
+  });
+
+  $("closingDatePicker").addEventListener("change", () => {
+    const iso = $("closingDatePicker").value;
+    if (!iso) return;
+    const d = new Date(iso + "T12:00:00");
+    $("closingDateText").value = dateToDDMMYYYY(d);
+    updateCalc();
+  });
+
+  $("closingDateText").addEventListener("blur", () => {
+    // On blur, if parseable, sync picker to keep both consistent
+    const parsed = parseDDMM($("closingDateText").value);
+    if (parsed.ok){
+      $("closingDatePicker").value = dateToISO(parsed.date);
+    }
+    updateCalc();
+  });
+
+  // ---------- sliders output ----------
+  function syncSliderLabels(){
+    $("commissionPctOut").textContent = `${toNumber($("commissionPct").value).toFixed(2)}%`;
+    $("closingCostPctOut").textContent = `${toNumber($("closingCostPct").value).toFixed(2)}%`;
+  }
+
+  // ---------- calc ----------
+  function updateCalc(){
+    syncSliderLabels();
+
+    const salePrice = Math.max(0, toNumber($("salePrice").value || defaults.salePrice));
+    const propertyTaxAnnual = Math.max(0, toNumber($("propertyTax").value || 0));
+    const mortgagePayoff = Math.max(0, toNumber($("mortgagePayoff").value || 0));
+
+    const commissionPct = clamp(toNumber($("commissionPct").value || defaults.commissionPct), 0, 8);
+    const closingCostPct = clamp(toNumber($("closingCostPct").value || defaults.closingCostPct), 0.5, 10);
+
+    // Date parse
+    const dateText = $("closingDateText").value;
+    const parsed = parseDDMM(dateText);
+    const dateError = $("dateError");
+
+    let taxProration = 0;
+    if (propertyTaxAnnual > 0){
+      if (!parsed.ok){
+        dateError.style.display = "block";
+        dateError.textContent = parsed.msg || "Please enter a valid closing date.";
+      } else {
+        dateError.style.display = "none";
+        const days = daysFromJan1Inclusive(parsed.date);
+        taxProration = (propertyTaxAnnual / 365) * days;
+      }
+    } else {
+      // If no property tax entered, don't show date error noise
+      if (parsed.ok) dateError.style.display = "none";
+      else {
+        dateError.style.display = "none";
+      }
+    }
+
+    const commissionCost = salePrice * (commissionPct / 100);
+    const closingCosts = salePrice * (closingCostPct / 100);
+
+    const titleYes = document.querySelector("#titleToggle input[name='titleYesNo']:checked")?.value === "yes";
+    const titleEstimate = titleYes ? Math.max(0, toNumber($("titleInsuranceEstimate").value || 0)) : 0;
+
+    const totalCosts = taxProration + commissionCost + closingCosts + titleEstimate;
+    const totalAll = totalCosts + mortgagePayoff;
+    const net = salePrice - totalAll;
+
+    // Outputs
+    $("salePriceOut").textContent = money(salePrice);
+    $("taxLine").textContent = money(taxProration);
+    $("commissionLine").textContent = money(commissionCost);
+    $("closingCostsLine").textContent = money(closingCosts);
+    $("titleLine").textContent = money(titleEstimate);
+    $("payoffLine").textContent = money(mortgagePayoff);
+    $("totalAllLine").textContent = money(totalAll);
+
+    $("commissionCost").textContent = money(commissionCost);
+    $("taxProrationCost").textContent = money(taxProration);
+    $("totalCosts").textContent = money(totalCosts);
+
+    const netEl = $("netProceeds");
+    netEl.textContent = money(net);
+    netEl.classList.remove("good","warn","bad");
+    if (net >= 0) netEl.classList.add("good");
+    else netEl.classList.add("bad");
+
+    // Note: include county display if title yes
+    const county = $("countySelect").value || "—";
+    $("note").textContent = titleYes
+      ? `Tax proration uses (annual tax ÷ 365) × days from Jan 1 through closing date (inclusive). Title insurance selected for ${county} County (estimate varies by provider; your optional estimate is used).`
+      : `Tax proration uses (annual tax ÷ 365) × days from Jan 1 through closing date (inclusive). Real closings can prorate differently depending on the settlement statement and tax cycle.`;
+  }
+
+  // ---------- share link ----------
+  function buildShareUrl(){
+    const params = new URLSearchParams();
+    params.set("sp", toNumber($("salePrice").value || defaults.salePrice));
+    params.set("pt", toNumber($("propertyTax").value || 0));
+    params.set("po", toNumber($("mortgagePayoff").value || 0));
+    params.set("cd", $("closingDateText").value || defaults.closingDateText);
+    params.set("cp", toNumber($("commissionPct").value || defaults.commissionPct));
+    params.set("cc", toNumber($("closingCostPct").value || defaults.closingCostPct));
+    const titleYesNo = document.querySelector("#titleToggle input[name='titleYesNo']:checked")?.value || "no";
+    params.set("ti", titleYesNo);
+    params.set("co", $("countySelect").value || defaults.county);
+    params.set("tie", toNumber($("titleInsuranceEstimate").value || 0));
+    return `${location.origin}${location.pathname}?${params.toString()}`;
+  }
+
+  function loadFromParams(){
+    const p = new URLSearchParams(location.search);
+    if (![...p.keys()].length) return;
+
+    if (p.has("sp")) $("salePrice").value = p.get("sp");
+    if (p.has("pt")) $("propertyTax").value = p.get("pt");
+    if (p.has("po")) $("mortgagePayoff").value = (toNumber(p.get("po")) === 0 ? "" : p.get("po"));
+    if (p.has("cd")) $("closingDateText").value = p.get("cd");
+    if (p.has("cp")) $("commissionPct").value = p.get("cp");
+    if (p.has("cc")) $("closingCostPct").value = p.get("cc");
+
+    if (p.has("ti")) setTitleToggle(p.get("ti") === "yes" ? "yes" : "no");
+    if (p.has("co")) $("countySelect").value = p.get("co");
+    if (p.has("tie")) $("titleInsuranceEstimate").value = (toNumber(p.get("tie")) === 0 ? "" : p.get("tie"));
+
+    // sync picker with text if parseable
+    const parsed = parseDDMM($("closingDateText").value);
+    if (parsed.ok) $("closingDatePicker").value = dateToISO(parsed.date);
+
+    updateCalc();
+  }
+
+  // ---------- events ----------
+  [
+    "salePrice","propertyTax","mortgagePayoff","closingDateText",
+    "commissionPct","closingCostPct","countySelect","titleInsuranceEstimate"
+  ].forEach(id => {
+    $(id).addEventListener("input", updateCalc);
+    $(id).addEventListener("change", updateCalc);
+  });
+
+  $("resetBtn").addEventListener("click", () => setDefaults());
+
+  $("copyLinkBtn").addEventListener("click", async () => {
+    const url = buildShareUrl();
+    try{
+      await navigator.clipboard.writeText(url);
+      $("copyLinkBtn").textContent = "Copied!";
+      setTimeout(() => $("copyLinkBtn").textContent = "Copy share link", 1200);
+    }catch{
+      prompt("Copy this link:", url);
+    }
+  });
+
+  $("printLink").addEventListener("click", (e) => {
+    e.preventDefault();
+    window.print();
+  });
+
+  // ---------- init ----------
+  populateCounties();
+  setDefaults();
+  loadFromParams();
+</script>
+</body>
+</html>
+
